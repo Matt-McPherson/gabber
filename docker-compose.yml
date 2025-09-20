@@ -1,52 +1,31 @@
 services:
-  editor:
-    build:
-      context: ./engine
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./.gabber:/app/.gabber
-      - ./.secret:/app/.secret
-    command: ["uv", "run", "gabber/main.py", "editor"]
-    environment:
-      - GABBER_SECRET_FILE=.secret
-      - GABBER_REPOSITORY_DIR=.gabber
-
-  repository:
-    build:
-      context: ./engine
-      dockerfile: Dockerfile
-    ports:
-      - "8001:8001"
-    volumes:
-      - ./.gabber:/app/.gabber
-      - ./.secret:/app/.secret
-    command: ["uv", "run", "gabber/main.py", "repository"]
-    environment:
-      - GABBER_SECRET_FILE=.secret
-      - GABBER_REPOSITORY_DIR=.gabber
-      - LIVEKIT_URL=ws://livekit:7880
-      - GABBER_PUBLIC_HOST=${GABBER_PUBLIC_HOST:-localhost}
-
   engine:
     depends_on:
       - livekit
     build:
       context: ./engine
       dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+      - "8001:8001"
     volumes:
       - ./.gabber:/app/.gabber
       - ./.secret:/app/.secret
-    command: ["uv", "run", "gabber/main.py", "engine"]
+    command: ["python", "/app/utils/start_all.py"]
     environment:
       - GABBER_SECRET_FILE=.secret
       - GABBER_REPOSITORY_DIR=.gabber
       - LIVEKIT_URL=ws://livekit:7880
       - LOCAL_LLM_HOST=host.docker.internal
       - KITTEN_TTS_HOST=kitten_tts
+      - GABBER_PUBLIC_HOST=${GABBER_PUBLIC_HOST:-localhost}
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    networks:
+      default:
+        aliases:
+          - editor
+          - repository
 
   livekit:
     image: livekit/livekit-server:latest
@@ -60,8 +39,6 @@ services:
 
   frontend:
     depends_on:
-      - editor
-      - repository
       - engine
       - livekit
     build:
@@ -77,3 +54,5 @@ services:
     build:
       context: services/kitten-tts
       dockerfile: Dockerfile
+    ports:
+      - "7003:7003"

@@ -1,0 +1,13 @@
+services:
+  engine:
+    volumes:
+      - /mnt/user/appdata/assistant/secret:/secret
+      - ./engine:/app      
+    environment:
+      GABBER_SECRET_FILE: /secret/.secret
+      LOCAL_LLM_HOST: 192.168.1.130
+      GABBER_PUBLIC_HOST: ${GABBER_PUBLIC_HOST:-192.168.1.130}
+
+  frontend:
+    environment:
+      GABBER_PUBLIC_HOST: ${GABBER_PUBLIC_HOST:-192.168.1.130}

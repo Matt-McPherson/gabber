@@ -10,7 +10,16 @@ RUN apt-get update && \
     git \
     gcc \
     curl \
+    nginx \
+    openssl \
     && rm -rf /var/lib/apt/lists/*
+
+RUN rm -f /etc/nginx/conf.d/default.conf && \
+    mkdir -p /etc/nginx/certs && \
+    openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
+        -keyout /etc/nginx/certs/dev.key \
+        -out /etc/nginx/certs/dev.crt \
+        -subj "/CN=localhost"
 
 WORKDIR /app
 
@@ -23,4 +32,7 @@ COPY README.md ./
 
 RUN uv sync --frozen
 
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+
 COPY . .
+

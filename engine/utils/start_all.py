@@ -5,6 +5,7 @@ import sys
 import time
 
 COMMANDS = [
+    ["nginx", "-g", "daemon off;"],
     ["uv", "run", "gabber/main.py", "editor"],
     ["uv", "run", "gabber/main.py", "repository"],
     ["uv", "run", "gabber/main.py", "engine"],
@@ -55,3 +56,4 @@ finally:
     shutdown()
 
 sys.exit(exit_code)
+

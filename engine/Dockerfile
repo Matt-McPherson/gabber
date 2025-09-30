@@ -1,7 +1,7 @@
 # Copyright 2025 Fluently AI, Inc. DBA Gabber. All rights reserved.
 # SPDX-License-Identifier: SUL-1.0
 
-FROM python:3.12-slim AS base
+FROM public.ecr.aws/docker/library/python:3.12-slim AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1
 
@@ -26,3 +26,4 @@ COPY README.md ./
 RUN uv sync --frozen
 
 COPY . .
+

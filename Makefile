@@ -1,4 +1,4 @@
-.PHONY: engine editor repository frontend all generate add-license livekit kitten-tts
+.PHONY: engine editor repository frontend all generate add-license livekit kitten-tts kokoro-tts
 
 GABBER_REPOSITORY_DIR ?= $(shell pwd)/.gabber
 GABBER_SECRET_FILE ?= $(shell pwd)/.secret
@@ -61,6 +61,9 @@ livekit:
 kitten-tts:
 	cd services/kitten-tts && ./start.sh
 
+kokoro-tts:
+	cd services/kokoro-tts && ./start.sh
+
 all:
 	make engine 2>&1 | while IFS= read -r line; do printf "\033[0;34m[ENGINE]\033[0m %s\n" "$$line"; done & ENGINE_PID=$$!; \
 	make editor 2>&1 | while IFS= read -r line; do printf "\033[0;32m[EDITOR]\033[0m %s\n" "$$line"; done & EDITOR_PID=$$!; \
@@ -68,5 +71,6 @@ all:
 	make frontend 2>&1 | while IFS= read -r line; do printf "\033[0;36m[FRONTEND]\033[0m %s\n" "$$line"; done & FRONTEND_PID=$$!; \
 	make livekit 2>&1 | while IFS= read -r line; do printf "\033[0;37m[LIVEKIT]\033[0m %s\n" "$$line"; done & LIVEKIT_PID=$$!; \
 	make kitten-tts 2>&1 | while IFS= read -r line; do printf "\033[0;33m[KITTEN-TTS]\033[0m %s\n" "$$line"; done & KITTEN_TTS_PID=$$!; \
+	make kokoro-tts 2>&1 | while IFS= read -r line; do printf "\033[0;33m[KOKORO-TTS]\033[0m %s\n" "$$line"; done & KOKORO_TTS_PID=$$!; \
 	trap 'echo "Stopping all processes..."; kill 0' INT;\
 	wait

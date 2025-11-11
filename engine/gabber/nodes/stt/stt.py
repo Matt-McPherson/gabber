@@ -3,6 +3,7 @@
 
 import asyncio
 import logging
+import os
 from typing import cast
 
 from gabber.core import node, pad
@@ -150,7 +151,8 @@ class STT(node.Node):
         elif service.get_value() == "local_kyutai":
             stt_impl = stt.Kyutai(port=8080)
         elif service.get_value() == "local_gabber":
-            stt_impl = stt.Gabber(logger=self.logger)
+            url = os.getenv("GABBER_STT_URL", "ws://localhost:7004")
+            stt_impl = stt.Gabber(logger=self.logger, url=url)
         elif service.get_value() == "deepgram":
             api_key_pad = cast(pad.PropertySinkPad, self.get_pad_required("api_key"))
             api_key_name = api_key_pad.get_value()

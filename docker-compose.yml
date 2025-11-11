@@ -45,6 +45,7 @@ services:
       - LIVEKIT_URL=ws://livekit:7880
       - LOCAL_LLM_HOST=host.docker.internal
       - KITTEN_TTS_HOST=kitten_tts
+      - GABBER_STT_URL=${GABBER_STT_URL:-ws://gabber_stt:7004}
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

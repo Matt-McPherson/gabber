@@ -92,9 +92,12 @@ export function ClientLayout({
     return await addSecret(name, value);
   }, []);
 
-  const updateSecretImpl = useCallback(async (id: string, name: string, value: string) => {
-    return await updateSecret(id, name, value);
-  }, []);
+  const updateSecretImpl = useCallback(
+    async (id: string, name: string, value: string) => {
+      return await updateSecret(id, name, value);
+    },
+    [],
+  );
 
   const deleteSecretImpl = useCallback(async (id: string) => {
     return await deleteSecret(id);

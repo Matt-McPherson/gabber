@@ -16,6 +16,9 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  {
+    ignores: ["next-env.d.ts", ".next/**", "node_modules/**"],
+  },
   ...compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
   eslintPluginPrettierRecommended, // Add this to enforce Prettier via ESLint
 ];
